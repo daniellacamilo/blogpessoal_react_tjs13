@@ -1,10 +1,11 @@
-import { useNavigate } from 'react-router-dom';
-import CardTema from '../cardtema/CardTema';
-import { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../../../contexts/AuthContext';
-import { SyncLoader } from 'react-spinners';
-import type Tema from '../../../models/Tema';
-import { buscar } from '../../../services/Service';
+import { useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { SyncLoader } from 'react-spinners'
+import { AuthContext } from '../../../contexts/AuthContext'
+import type Tema from '../../../models/Tema'
+import { buscar } from '../../../services/Service'
+import CardTema from '../cardtema/CardTema'
+import { ToastAlerta } from '../../../utils/ToastAlerta'
 
 function ListaTemas() {
 	// Objeto responsável por redirecionar o usuário para uma outra rota
@@ -25,7 +26,7 @@ function ListaTemas() {
 	// Cria um useEffect para monitorar o token
 	useEffect(() => {
 		if (token === '') {
-			alert('Você precisa estar logado!')
+			ToastAlerta('Você precisa estar logado!', "info")
 			navigate('/')
 		}
 	}, [token])
@@ -85,7 +86,3 @@ function ListaTemas() {
 	)
 }
 export default ListaTemas
-
-function ToastAlerta(arg0: string, arg1: string) {
-    throw new Error('Function not implemented.');
-}

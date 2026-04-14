@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState, type ChangeEvent, type SyntheticEvent, } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { ClipLoader } from 'react-spinners';
-import { AuthContext } from '../../../contexts/AuthContext';
-import type Postagem from '../../../models/Postagem';
-import type Tema from '../../../models/Tema';
-import { buscar, cadastrar, atualizar } from '../../../services/Service';
-
+import { useContext, useEffect, useState, type ChangeEvent, type SyntheticEvent, } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { ClipLoader } from 'react-spinners'
+import { AuthContext } from '../../../contexts/AuthContext'
+import type Postagem from '../../../models/Postagem'
+import type Tema from '../../../models/Tema'
+import { atualizar, buscar, cadastrar } from '../../../services/Service'
+import { ToastAlerta } from '../../../utils/ToastAlerta'
 
 function FormPostagem() {
 	const navigate = useNavigate()
@@ -20,11 +20,10 @@ function FormPostagem() {
 
 	const [postagem, setPostagem] = useState<Postagem>({} as Postagem)
 
-	const { id } = useParams<{ id: string }>()
-
 	const { usuario, handleLogout } = useContext(AuthContext)
 	const token = usuario.token
 
+	const { id } = useParams<{ id: string }>()
 
 	async function buscarPostagemPorId(id: string) {
 		try {
@@ -65,8 +64,8 @@ function FormPostagem() {
 
 	useEffect(() => {
 		if (token === '') {
-			alert('Você precisa estar logado')
-			navigate('/');
+			ToastAlerta('Você precisa estar logado', "info")
+			navigate('/')
 		}
 	}, [token])
 
@@ -95,11 +94,11 @@ function FormPostagem() {
 			[e.target.name]: e.target.value,
 			tema: tema,
 			usuario: usuario as unknown as Postagem['usuario'],
-		});
+		})
 	}
 
 	function retornar() {
-		navigate('/postagens');
+		navigate('/postagens')
 	}
 
 	async function gerarNovaPostagem(e: SyntheticEvent<HTMLFormElement>) {
@@ -116,14 +115,15 @@ function FormPostagem() {
 						headers: {
 							Authorization: token,
 						},
-					}),
+					},
+				)
 
-				alert('Postagem atualizada com sucesso')
+				ToastAlerta('Postagem atualizada com sucesso', "sucesso")
 			} catch (error: any) {
 				if (error.toString().includes('401')) {
 					handleLogout()
 				} else {
-					alert('Erro ao atualizar a Postagem')
+					ToastAlerta('Erro ao atualizar a Postagem', "erro")
 				}
 			}
 		} else {
@@ -139,12 +139,12 @@ function FormPostagem() {
 					},
 				)
 
-				alert('Postagem cadastrada com sucesso')
+				ToastAlerta('Postagem cadastrada com sucesso', "sucesso")
 			} catch (error: any) {
 				if (error.toString().includes('401')) {
 					handleLogout()
 				} else {
-					alert('Erro ao cadastrar a Postagem')
+					ToastAlerta('Erro ao cadastrar a Postagem', "erro")
 				}
 			}
 		}
@@ -153,7 +153,7 @@ function FormPostagem() {
 		retornar()
 	}
 
-	const carregandoTema = tema.descricao === '';
+	const carregandoTema = tema.descricao === ''
 
 	return (
 		<div className="container flex flex-col mx-auto items-center">
