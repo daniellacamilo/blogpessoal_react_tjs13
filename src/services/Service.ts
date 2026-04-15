@@ -1,7 +1,7 @@
 import  axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'https://blogpessoal-ovm8.onrender.com', // Replace with your API base URL
+    baseURL: import.meta.env.VITE_API_URL, // Replace with your API base URL
 })
 
 // Função para Cadastrar Usuário
